@@ -16,10 +16,10 @@ defmodule Aoc do
     end
 
     def check_three_voyels(word) do
-        nb = Enum.count String.split(word,""), fn l ->
+        nb = Enum.count String.split(word,"", trim: true), fn l ->
             @voyels =~ l
         end
-        (nb - 1) > 2
+        nb > 2
     end
 
     def check_bad_string(s) do
