@@ -1,6 +1,8 @@
 
 # AOC 2015 5-1
 
+# Made without regex. I regret it. Not worth it. 
+
 defmodule Aoc do
 
     @voyels "aeiou"
