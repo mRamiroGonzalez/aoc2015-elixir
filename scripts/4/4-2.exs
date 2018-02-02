@@ -1,5 +1,5 @@
 
-# AOC 2015 4-1
+# AOC 2015 4-2
 
 defmodule Aoc do    
     def mine(secret, acc) do
@@ -12,7 +12,7 @@ defmodule Aoc do
     end
 
     def check(md5) do
-        String.slice(md5,0,5) == "00000" 
+        String.slice(md5,0,6) == "000000" 
     end
 end
 
