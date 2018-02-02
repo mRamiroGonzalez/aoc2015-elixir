@@ -1,5 +1,5 @@
 
-# AOC 2015 2-1
+# AOC 2015 2-2
 
 defmodule Aoc do
     def parse_input(_, ribbon \\ 0)
