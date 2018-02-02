@@ -7,10 +7,9 @@ defmodule Aoc do
     @rule2 ~r/([a-zA-Z]).\1/
 
     def parseInput(list) do
-        nb = Enum.count list, fn e ->
+        IO.puts Enum.count list, fn e ->
             Regex.match?(@rule1, e) && Regex.match?(@rule2, e)
         end
-        IO.puts nb
     end
 end
 
