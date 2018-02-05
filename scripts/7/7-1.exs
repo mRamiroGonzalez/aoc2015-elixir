@@ -1,17 +1,35 @@
 
 # AOC 2015 7-1
 
-# not(a)        -> 65535 - a
-# or(a,b)       -> bor(a, b)
-# and(a,b)      -> band(a, b)
-# lshift(a,b)   -> round(a * :math.pow(2, b))
-# rshift(a,b)   -> Integer.floor_div(a, round(:math.pow(2, b)))
+defmodule Int16 do
+    use Bitwise
+
+    def bNot(nb), do: 65535 - nb
+    def bOr(a, b), do: bor(a, b)
+    def bAnd(a, b), do: band(a, b)
+    def bLshift(a, b), do: round(a * :math.pow(2, b))
+    def bRshift(a, b), do: Integer.floor_div(a, round(:math.pow(2, b)))
+end
+
+defmodule ListOps do
+    def pprint(list) do
+        IO.puts "#{inspect list}"
+        Enum.each list, fn (x) -> IO.puts "#{inspect x}" end
+    end
+
+    def process(list) do
+    end
+end
 
 defmodule Aoc do
-    def parseInput([]), do: IO.puts "end"
-    def parseInput([h|t]) do
-        IO.puts "#{inspect split_instruction(h)}"
-        parseInput(t)
+    alias ListOps
+
+    def parseInput(lines, mapList \\ [])
+    def parseInput([h|t], mapList), do: parseInput(t, mapList ++ [split_instruction(h)])
+    def parseInput([], mapList) do
+        # ListOps.pprint(mapList)
+        ListOps.process(mapList)
+        IO.puts "stop"
     end
 
     def split_instruction(line) do
@@ -22,18 +40,18 @@ defmodule Aoc do
             "AND" ->
                 %{i: :and, i1: Enum.at(instruct,0), i2: Enum.at(instruct,2), o: Enum.at(instruct,4)}
             "RSHIFT" ->
-                %{i: :rshift, i1: Enum.at(instruct,0), i2: String.to_integer(Enum.at(instruct,2)), o: Enum.at(instruct,4)}
+                %{i: :rshift, i1: Enum.at(instruct,0), i2: Enum.at(instruct,2), o: Enum.at(instruct,4)}
             "LSHIFT" ->
-                %{i: :lshift, i1: Enum.at(instruct,0), i2: String.to_integer(Enum.at(instruct,2)), o: Enum.at(instruct,4)}
+                %{i: :lshift, i1: Enum.at(instruct,0), i2: Enum.at(instruct,2), o: Enum.at(instruct,4)}
             "->" ->
                 case Integer.parse(Enum.at(instruct,0)) do
                     {nb, _} ->
-                        %{i: :number, i1: nb, i2: nil, o: Enum.at(instruct,2)}
+                        %{i: :number, i1: Integer.to_string(nb), o: Enum.at(instruct,2)}
                     :error ->
-                        %{i: :cable, i1: Enum.at(instruct,1), i2: nil, o: Enum.at(instruct,2)}
+                        %{i: :cable, i1: Enum.at(instruct,0), o: Enum.at(instruct,2)}
                 end
             _ ->
-                %{i: :not, i1: Enum.at(instruct,0), i2: nil, o: Enum.at(instruct,2)}
+                %{i: :not, i1: Enum.at(instruct,1), o: Enum.at(instruct,3)}
             end
     end
 end
