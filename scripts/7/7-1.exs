@@ -1,6 +1,12 @@
 
 # AOC 2015 7-1
 
+# not(a)        -> 65535 - a
+# or(a,b)       -> bor(a, b)
+# and(a,b)      -> band(a, b)
+# lshift(a,b)   -> round(a * :math.pow(2, b))
+# rshift(a,b)   -> Integer.floor_div(a, round(:math.pow(2, b)))
+
 defmodule Aoc do
     def parseInput([]), do: IO.puts "end"
     def parseInput([h|t]) do
