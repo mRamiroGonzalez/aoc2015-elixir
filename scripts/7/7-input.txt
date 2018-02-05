@@ -1,0 +1,7 @@
+NOT dq -> dr
+kg OR kf -> kh
+eg AND ei -> ej
+lf RSHIFT 2 -> lg
+eo LSHIFT 15 -> es
+44430 -> b
+lx -> a
