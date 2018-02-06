@@ -100,5 +100,5 @@ defmodule Aoc do
     end
 end
 
-File.read!("7-input-1.txt") |> String.split("\n") |> Aoc.parseInput
+File.read!("7-input.txt") |> String.split("\n") |> Aoc.parseInput
 File.read!("7-input-2.txt") |> String.split("\n") |> Aoc.parseInput
