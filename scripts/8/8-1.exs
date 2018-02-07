@@ -7,15 +7,8 @@
 # 4 - String.length on the pasted string
 stringLength = 4860
 file = File.read!("8-input.txt")
+
 split = String.split(file, "\n")
 baseFileLength = String.length(file) - length(split) + 1
+
 IO.puts "Answer step 1: #{baseFileLength - stringLength}"
-
-
-# 1 - IO.inspect each line of 8-input.txt
-# 2 - copy the lines printed in the console
-# 3 - paste the lines in a new file
-file2 = File.read!("8-input-modified-2.txt")
-split2 = String.split(file, "\n")
-escapedFileLength = String.length(file2) - length(split2) + 1
-IO.puts "Answer step 2: #{escapedFileLength - baseFileLength}"
