@@ -31,16 +31,15 @@ defmodule PathFinder do
     def path_from(cities, current, visited \\ []) do
         visited = visited ++ [current]
 
-        paths = Enum.reduce cities, [], fn(x, acc) ->
+        Enum.each cities, fn(x) ->
             if (not x in visited) do
                 path_from(cities, x, visited)                
             end
-            if (length(visited) == length(cities)) do
-                acc ++ visited    
-            end
         end
-        IO.inspect paths
-        
+
+        if (length(visited) == length(cities)) do
+            IO.inspect visited    
+        end
     end    
     
     def get_cost(costs, from, to) do
