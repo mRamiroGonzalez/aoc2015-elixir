@@ -1,0 +1,6 @@
+["London", "Belfast", "Dublin"]
+["London", "Dublin", "Belfast"]
+["Belfast", "London", "Dublin"]
+["Belfast", "Dublin", "London"]
+["Dublin", "London", "Belfast"]
+["Dublin", "Belfast", "London"]
