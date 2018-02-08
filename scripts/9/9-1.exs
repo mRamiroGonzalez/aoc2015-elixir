@@ -31,7 +31,7 @@ defmodule PathFinder do
     def path_from(cities, current, visited \\ []) do
         visited = visited ++ [current]
 
-        paths = Enum.reduce cities, [] fn(x, acc) ->
+        paths = Enum.reduce cities, [], fn(x, acc) ->
             if (not x in visited) do
                 path_from(cities, x, visited)                
             end
