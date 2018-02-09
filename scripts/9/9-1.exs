@@ -1,5 +1,7 @@
 
-#AOC 2015 9-1
+# AOC 2015 9-1
+
+# TODO: find another way to save paths (not in a file)
 
 defmodule InstructionSplitter do
     def splitInstruction(line) do
@@ -22,13 +24,17 @@ defmodule InstructionSplitter do
      def getPathsList(lines) do
         instructions = String.split(lines, "\n")
         Enum.reduce instructions, [], fn (x, acc) ->
-            line =  String.replace(x, "\"", "")
+            if(x != "") do
+                line =  String.replace(x, "\"", "")
                 |>  String.replace("[", "")
                 |>  String.replace("]", "")
                 |>  String.split(", ")
                 |>  Enum.reduce([], fn(y, acc2) -> acc2 ++ [y] end)
 
-            acc ++ [line]
+                acc ++ [line]
+            else
+                acc
+            end
         end
      end
 end
@@ -50,28 +56,37 @@ defmodule PathFinder do
         end
 
         if (length(visited) == length(cities)) do
-            # IO.inspect visited
-            # {:ok, file} = File.open("paths.txt",[:append])
-            # IO.write(file, inspect visited)
-            # IO.write(file, "\n")
-            # File.close(file)
+            IO.inspect visited
+            {:ok, file} = File.open("paths.txt",[:append])
+            IO.write(file, inspect visited)
+            IO.write(file, "\n")
+            File.close(file)
         end
     end    
     
 end
 
-defmodule CostCalculator do
-    alias InstructionSplitter
-    
-    def getMinCost(costs) do
-        paths = InstructionSplitter.getPathsList(File.read!("paths.txt"))
-        IO.inspect paths
-        IO.inspect costs
+defmodule CostCalculator do    
+    def get_cost(costs, from, to) do
+        res = Enum.find costs, fn(x) -> (x.from == from or x.from == to) and (x.to == from or x.to == to) end
+        String.to_integer(res.dist)
     end
 
-    def getCost(costs, from, to) do
-        res = Enum.find costs, fn(x) -> (x.city1 == from or x.city1 == to) and (x.city2 == from or x.city2 == to) end
-        res.cost
+    def get_cost_for_path(path, costs, acc \\ 0)
+    def get_cost_for_path([_], _, acc), do: acc
+    def get_cost_for_path([from, to | t], costs, acc) do
+        acc = acc + get_cost(costs, from, to)
+        get_cost_for_path([to|t], costs, acc)
+    end
+    
+    def get_costs_for_paths(paths, costs, acc \\ 0, results \\ [])
+    def get_costs_for_paths([], _, _, results) do
+        IO.inspect Enum.min(results)
+    end
+    def get_costs_for_paths([h|t], costs, acc, results) do
+        cost = get_cost_for_path(h, costs)
+        results = results ++ [cost]
+        get_costs_for_paths(t, costs, acc + 1, results)
     end
 end
 
@@ -80,20 +95,24 @@ defmodule Aoc do
     alias PathFinder
     alias CostCalculator
 
-    def parseInput(lines, tab \\ [])
-    def parseInput([h|t], tab) do
+    def parseInput(lines, costs \\ [])
+    def parseInput([h|t], costs) do
         instruct = InstructionSplitter.splitInstruction(h)
-        parseInput(t, tab ++ [instruct])
+        parseInput(t, costs ++ [instruct])
     end
-    def parseInput([], tab) do
-        cities = InstructionSplitter.getCitiesList(tab)
-        processInstructions(tab, cities)
+    def parseInput([], costs) do
+        cities = InstructionSplitter.getCitiesList(costs)
+        IO.inspect cities
+        IO.inspect costs
+        processInstructions(costs, cities)
     end
 
-    def processInstructions(tab, cities) do
+    def processInstructions(costs, cities) do
         PathFinder.getAllPathsFor(cities)
-        CostCalculator.getMinCost(tab)
+        paths = InstructionSplitter.getPathsList(File.read!("paths.txt"))
+        CostCalculator.get_costs_for_paths(paths, costs)
     end
 end
 
+File.rm("paths.txt")
 File.read!("9-input-test.txt") |> String.split("\n") |> Aoc.parseInput
