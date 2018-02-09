@@ -1,5 +1,5 @@
 
-# AOC 2015 9-1
+# AOC 2015 9-1 & 9-2
 
 # TODO: find another way to save paths (not in a file)
 
@@ -82,7 +82,8 @@ defmodule CostCalculator do
     
     def get_costs_for_paths(paths, costs, acc \\ 0, results \\ [])
     def get_costs_for_paths([], _, _, results) do
-        IO.inspect Enum.min(results)
+        IO.puts "Lowest cost: #{Enum.min(results)}"
+        IO.puts "Highest cost: #{Enum.max(results)}"
     end
     def get_costs_for_paths([h|t], costs, acc, results) do
         cost = get_cost_for_path(h, costs)
@@ -112,7 +113,7 @@ defmodule Aoc do
         PathFinder.getAllPathsFor(cities)
         IO.puts "Reading path list from file"
         paths = InstructionSplitter.getPathsList(File.read!("paths.txt"))
-        IO.puts "Found #{length paths} paths, finding lower cost"
+        IO.puts "Found #{length paths} paths, finding paths costs"
         CostCalculator.get_costs_for_paths(paths, costs)
     end
 end
@@ -120,5 +121,6 @@ end
 start = :os.system_time(:millisecond)
 File.rm("paths.txt")
 File.read!("9-input.txt") |> String.split("\n") |> Aoc.parseInput
+File.rm("paths.txt")
 stop = :os.system_time(:millisecond)
 IO.puts "Took #{stop - start} milliseconds"
