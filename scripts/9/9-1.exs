@@ -12,11 +12,13 @@ defmodule InstructionSplitter do
     def getCitiesList(instuctions, cities \\ []) do
         Enum.reduce instuctions, [], fn (x, acc) ->
              if(x.from not in acc) do
-                 acc ++ [x.from]
+                acc ++ [x.from]
              else 
-                 if(x.to not in cities) do
-                     acc ++ [x.to]
-                 end 
+                if(x.to not in acc) do
+                    acc ++ [x.to]
+                else
+                    acc
+                end 
              end
         end
      end
@@ -56,7 +58,6 @@ defmodule PathFinder do
         end
 
         if (length(visited) == length(cities)) do
-            IO.inspect visited
             {:ok, file} = File.open("paths.txt",[:append])
             IO.write(file, inspect visited)
             IO.write(file, "\n")
@@ -101,18 +102,23 @@ defmodule Aoc do
         parseInput(t, costs ++ [instruct])
     end
     def parseInput([], costs) do
+        IO.puts "Getting cities list"
         cities = InstructionSplitter.getCitiesList(costs)
-        IO.inspect cities
-        IO.inspect costs
         processInstructions(costs, cities)
     end
 
     def processInstructions(costs, cities) do
+        IO.puts "Getting paths for #{length cities} cities"
         PathFinder.getAllPathsFor(cities)
+        IO.puts "Reading path list from file"
         paths = InstructionSplitter.getPathsList(File.read!("paths.txt"))
+        IO.puts "Found #{length paths} paths, finding lower cost"
         CostCalculator.get_costs_for_paths(paths, costs)
     end
 end
 
+start = :os.system_time(:millisecond)
 File.rm("paths.txt")
-File.read!("9-input-test.txt") |> String.split("\n") |> Aoc.parseInput
+File.read!("9-input.txt") |> String.split("\n") |> Aoc.parseInput
+stop = :os.system_time(:millisecond)
+IO.puts "Took #{stop - start} milliseconds"
