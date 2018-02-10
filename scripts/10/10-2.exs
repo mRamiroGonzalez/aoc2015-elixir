@@ -36,6 +36,11 @@ defmodule Aoc do
     end
 end
 
+start = :os.system_time(:millisecond)
+
 seed = 1321131112
 IO.puts "Starting with: #{seed}"
 Aoc.expand(seed)
+
+stop = :os.system_time(:millisecond)
+IO.puts "Took #{(stop - start) / 1000} seconds"
