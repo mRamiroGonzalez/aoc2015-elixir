@@ -1,11 +1,9 @@
 
 # AOC 2015 10-2
 
-# 59214
-
 defmodule Aoc do
     def expand(nb) do
-        digits = Integer.digits nb
+        digits = Integer.digits(nb)
         countOneStep(digits)
     end
 
@@ -13,12 +11,10 @@ defmodule Aoc do
     def countOneStep(list, 50), do: IO.puts "Final length: #{length(list)}"
     def countOneStep(list, acc) do
         start = :os.system_time(:millisecond)
-
         newlist = processCurrentStep(list)
-
         stop = :os.system_time(:millisecond)
-        IO.puts "Step #{acc + 1} took #{(stop - start) / 1000} seconds"
 
+        IO.puts "Step #{acc + 1} took #{round((stop - start) / 1000)} seconds"
         countOneStep(newlist, acc + 1)
     end
 
@@ -31,9 +27,13 @@ defmodule Aoc do
         processCurrentStep(remainingList, newList)
     end
 
-    def findNbFirstChar([a, a, a | t]), do: {3, t}
-    def findNbFirstChar([a, a | t]), do: {2, t} 
-    def findNbFirstChar([_ | t]), do: {1, t}
+    def findNbFirstChar(list) do
+        case list do
+            [a,a,a|t] -> {3, t}
+            [a,a|t] -> {2, t}
+            [_|t] -> {1, t}
+        end
+    end
 end
 
 seed = 1321131112
