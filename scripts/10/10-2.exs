@@ -26,15 +26,14 @@ defmodule Aoc do
     def processCurrentStep([], newList), do: newList
     def processCurrentStep(list, newList) do
         [toFind | _] = list
-        nb = findNbFirstChar(list)
-        list = Enum.drop(list, nb)
+        {nb, remainingList} = findNbFirstChar(list)
         newList = newList ++ [nb] ++ [toFind]
-        processCurrentStep(list, newList)
+        processCurrentStep(remainingList, newList)
     end
 
-    def findNbFirstChar([a, a, a | _]), do: 3
-    def findNbFirstChar([a, a | _]), do: 2 
-    def findNbFirstChar([_ | _]), do: 1
+    def findNbFirstChar([a, a, a | t]), do: {3, t}
+    def findNbFirstChar([a, a | t]), do: {2, t} 
+    def findNbFirstChar([_ | t]), do: {1, t}
 end
 
 seed = 1321131112
