@@ -2,45 +2,40 @@
 # AOC 2015 10-2
 
 defmodule Aoc do
-    def expand(nb) do
-        digits = Integer.digits(nb)
-        countOneStep(digits)
+    def expand(seed, steps) do
+        digits = Integer.digits(seed)
+        countOneStep(digits, steps)
     end
 
-    def countOneStep(list, acc \\ 0)
-    def countOneStep(list, 50), do: IO.puts "Final length: #{length(list)}"
-    def countOneStep(list, acc) do
-        start = :os.system_time(:millisecond)
+    def countOneStep(list, steps, acc \\ 0)
+    def countOneStep(list, steps, steps), do: IO.puts "Final length: #{length(list)}"
+    def countOneStep(list, steps, acc) do
         newlist = processCurrentStep(list)
-        stop = :os.system_time(:millisecond)
-
-        IO.puts "Step #{acc + 1} took #{round((stop - start) / 1000)} seconds"
-        countOneStep(newlist, acc + 1)
+        countOneStep(newlist, steps, acc + 1)
     end
 
-    def processCurrentStep(list, newList \\ [])
-    def processCurrentStep([], newList), do: newList
-    def processCurrentStep(list, newList) do
-        [toFind | _] = list
-        {nb, remainingList} = findNbFirstChar(list)
-        newList = newList ++ [nb] ++ [toFind]
-        processCurrentStep(remainingList, newList)
-    end
-
-    def findNbFirstChar(list) do
-        case list do
-            [a,a,a|t] -> {3, t}
-            [a,a|t] -> {2, t}
-            [_|t] -> {1, t}
+    def processCurrentStep(list) do
+        newList = Enum.reduce list, [], fn(x, acc) ->
+            if(Enum.empty?(acc))do
+                [x, 1| acc]
+            else
+                [e, nb| t] = acc
+                if(e == x) do
+                    [x, nb + 1| t]
+                else
+                    [x, 1| acc]
+                end
+            end
         end
+        newList |> Enum.reverse
     end
 end
 
+seed = 1321131112
 start = :os.system_time(:millisecond)
 
-seed = 1321131112
 IO.puts "Starting with: #{seed}"
-Aoc.expand(seed)
+Aoc.expand(seed, 50)
 
 stop = :os.system_time(:millisecond)
 IO.puts "Took #{(stop - start) / 1000} seconds"

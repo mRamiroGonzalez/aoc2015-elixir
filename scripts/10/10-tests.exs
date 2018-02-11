@@ -30,9 +30,9 @@ defmodule AdventOfCode.DayTen do
                             [comp, x ,c|tail]
                     end
             end
-      end)
-      [{a, b}|tail] = list
-      [a, b|tail] |> Enum.reverse
+        end)
+        [{a, b}|tail] = list
+        [a, b|tail] |> Enum.reverse
     end
   
     defp compare(head, e) do
