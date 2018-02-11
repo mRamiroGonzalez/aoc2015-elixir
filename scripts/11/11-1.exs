@@ -15,7 +15,8 @@ defmodule Aoc do
     end
 
     def incrementPassword(current) do
-        String.to_charlist(current) 
+        current
+        |> String.to_charlist 
         |> Enum.reverse
         |> incrementCharacter
         |> Enum.reverse
@@ -42,7 +43,7 @@ defmodule Aoc do
     def hasThreeIncreasingLetters(word), do: word |> String.to_charlist |> hasThreeIncreasingLetters
     
     def doesNotHaveForbidenLetters(word) do
-        not (String.contains?(word, "i") or String.contains?(word, "o") or String.contains?(word, "l"))
+        not String.contains?(word, ["i", "o", "l"])
     end
 
     def hasTwoPairsOfLetters(word) do
