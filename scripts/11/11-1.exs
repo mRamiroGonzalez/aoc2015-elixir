@@ -1,5 +1,5 @@
 
-# AOC 2015 11-1
+# AOC 2015 11-1 & 11-2
 
 defmodule Aoc do
     
@@ -52,3 +52,4 @@ defmodule Aoc do
 end
 
 Aoc.getNextPassword("hxbxwxba")
+Aoc.getNextPassword(Aoc.incrementPassword("hxbxxyzz"))
