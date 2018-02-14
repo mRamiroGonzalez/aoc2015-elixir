@@ -3,5 +3,8 @@ defmodule Aoc2015Test do
   doctest Aoc2015
 
   IO.puts "Starting AOC 2015 script"
+  start = :os.system_time(:millisecond)
   Aoc2015.Twelve.Two.start
+  stop = :os.system_time(:millisecond)
+  IO.puts "Took #{(stop - start) / 1000} seconds"     
 end
