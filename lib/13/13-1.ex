@@ -1,20 +1,4 @@
 
-# Then, if you seat Alice next to David, Alice would lose 2 happiness units (because David talks so much), 
-# but David would gain 46 happiness units (because Alice is such a good listener), for a total change of 44.
-
-# If you continue around the table, you could then seat Bob next to Alice (Bob gains 83, Alice gains 54). 
-# Finally, seat Carol, who sits next to Bob (Carol gains 60, Bob loses 7) and David (Carol gains 55, David gains 41). 
-# The arrangement looks like this:
-
-#      +41 +46
-# +55   David    -2
-# Carol       Alice
-# +60    Bob    +54
-#      -7  +83
-
-# After trying every other seating arrangement in this hypothetical scenario, you find that this one is the most optimal, 
-# with a total change in happiness of 330.
-
 defmodule Aoc2015.Thirteen.ThingsWithFiles do
     def getSeatingsListFromFile(lines) do
         instructions = String.split(lines, "\n")
@@ -34,7 +18,7 @@ defmodule Aoc2015.Thirteen.ThingsWithFiles do
      end
 
     def parseInstructions(instructionsList) do
-        Enum.reduce instructionsList, [], fn(x, acc) -> 
+        Enum.reduce instructionsList, [], fn(x, acc) ->
             instruction = String.split(x, " ")
             entry = Map.put(%{}, :person, Enum.at(instruction, 0))
             entry = Map.put(entry, :nextTo, Enum.at(instruction, 10))
@@ -44,7 +28,7 @@ defmodule Aoc2015.Thirteen.ThingsWithFiles do
                     Map.put(entry, :points, num)
                 else
                     num = String.to_integer(Enum.at(instruction, 3))
-                    Map.put(entry, :points, -num)                    
+                    Map.put(entry, :points, -num)
                 end
             [entry | acc]
         end
@@ -57,7 +41,7 @@ defmodule Aoc2015.Thirteen.BoringListThingFindSeatings do
 
         Enum.each peopleList, fn(x) ->
             if (not x in visited) do
-                getSeatingListFrom(peopleList, x, visited)                
+                getSeatingListFrom(peopleList, x, visited)
             end
         end
 
@@ -68,7 +52,7 @@ defmodule Aoc2015.Thirteen.BoringListThingFindSeatings do
             File.close(file)
         end
 
-    end   
+    end
 
     def getSeatingList(peopleList) do
         Enum.each peopleList, fn(x) ->
@@ -84,7 +68,7 @@ defmodule Aoc2015.Thirteen.BoringListThingFindSeatings do
                 [x.person | acc]
             end
         end
-    end    
+    end
 end
 
 defmodule Aoc2015.Thirteen.One do
@@ -92,18 +76,50 @@ defmodule Aoc2015.Thirteen.One do
     def process(list) do
         IO.puts "Parsing instructions"
         instructions = Aoc2015.Thirteen.ThingsWithFiles.parseInstructions(list)
+
         IO.puts "Getting people list"
         peopleList = Aoc2015.Thirteen.BoringListThingFindSeatings.getPeopleList(instructions)
+
         IO.puts "Getting seating orders"
         Aoc2015.Thirteen.BoringListThingFindSeatings.getSeatingList(peopleList)
+
         IO.puts "Recovering seatings from file"
         seatingsFromFile = Aoc2015.Thirteen.ThingsWithFiles.getSeatingsListFromFile(File.read!("lib/13/paths.txt"))
-        IO.inspect seatingsFromFile
-    end 
+
+        IO.puts "Finding happinesss for each seating"
+        findHappinesss(seatingsFromFile, instructions)
+    end
+
+    def findHappinesss(seatingsFromFile, instructions) do
+        happinesss = Enum.reduce seatingsFromFile, [], fn(seating, acc) ->
+            happiness = Enum.reduce seating, 0, fn(person, acc) ->
+                index = Enum.find_index(seating, fn(x) -> x == person end)
+                person_before = Enum.at(seating, index - 1)
+                person_after =
+                    if (index == length(seating) - 1) do
+                        Enum.at(seating, 0)
+                    else
+                        Enum.at(seating, index + 1)
+                    end
+
+                acc + findHappinessEntry(instructions, person, person_before) + findHappinessEntry(instructions, person, person_after)
+            end
+            [happiness | acc]
+        end
+        IO.inspect(Enum.max(happinesss))
+    end
+
+    def findHappinessEntry(instructions, person, nextTo) do
+        entry =
+            Enum.find(instructions, fn (x) ->
+                x.person == person and x.nextTo == nextTo
+            end)
+        entry.points
+    end
 
     def start do
         File.rm("lib/13/paths.txt")
-        File.read!("lib/13/13-input-test.txt") |> String.replace(".", "") |> String.split("\n") |> process    
+        File.read!("lib/13/13-input.txt") |> String.replace(".", "") |> String.split("\n") |> process
         File.rm("lib/13/paths.txt")
     end
 end
