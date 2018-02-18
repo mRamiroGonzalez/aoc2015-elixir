@@ -5,8 +5,8 @@ defmodule Aoc2015Test do
   IO.puts "Starting AOC 2015 script"
   start = :os.system_time(:millisecond)
 
-  Aoc2015.Thirteen.OneTwo.start()
+  Aoc2015.Fourteen.One.start()
 
   stop = :os.system_time(:millisecond)
-  IO.puts "Took #{(stop - start) / 1000} seconds"     
+  IO.puts "Took #{(stop - start) / 1000} seconds\n"
 end
