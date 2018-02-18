@@ -12,17 +12,17 @@ defmodule InstructionSplitter do
     def getCitiesList(instuctions) do
         Enum.reduce instuctions, [], fn (x, acc) ->
              if(x.from not in acc) do
-                acc ++ [x.from]
+                [x.from | acc]
              else 
                 if(x.to not in acc) do
-                    acc ++ [x.to]
+                    [x.to | acc]
                 else
                     acc
                 end 
              end
         end
      end
-     
+
      def getPathsList(lines) do
         instructions = String.split(lines, "\n")
         Enum.reduce instructions, [], fn (x, acc) ->
@@ -33,7 +33,7 @@ defmodule InstructionSplitter do
                 |>  String.split(", ")
                 |>  Enum.reduce([], fn(y, acc2) -> acc2 ++ [y] end)
 
-                acc ++ [line]
+                [line | acc]
             else
                 acc
             end
