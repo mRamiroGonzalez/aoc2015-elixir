@@ -43,17 +43,9 @@ defmodule Aoc2015.Fourteen.One do
           getPositionAt(reindeer, limit, nbStep + 1, dist, :sleeping, remaining - 1)
         end
     end
-
-  end
-
-  def getReindeerList(instructions) do
-    Enum.reduce(instructions, [], fn (x, acc) ->
-      [x.name | acc]
-    end)
   end
 
   def start do
-#    File.read!("lib/14/14-input-test.txt") |> String.split("\n") |> parseInstructions |> findFirstAt(1000)
     File.read!("lib/14/14-input.txt") |> String.split("\n") |> parseInstructions |> findFirstAt(2503)
   end
 end
