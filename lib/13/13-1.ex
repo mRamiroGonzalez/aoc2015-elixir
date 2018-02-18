@@ -10,7 +10,7 @@ defmodule Aoc2015.Thirteen.ThingsWithFiles do
                 |>  String.split(", ")
                 |>  Enum.reduce([], fn(y, acc2) -> acc2 ++ [y] end)
 
-                acc ++ [line]
+                [line | acc]
             else
                 acc
             end
@@ -71,7 +71,7 @@ defmodule Aoc2015.Thirteen.BoringListThingFindSeatings do
     end
 end
 
-defmodule Aoc2015.Thirteen.One do
+defmodule Aoc2015.Thirteen.OneTwo do
 
     def process(list) do
         IO.puts "Parsing instructions"
@@ -119,7 +119,13 @@ defmodule Aoc2015.Thirteen.One do
 
     def start do
         File.rm("lib/13/paths.txt")
+
+        IO.puts "\nStep 1:"
         File.read!("lib/13/13-input.txt") |> String.replace(".", "") |> String.split("\n") |> process
+        File.rm("lib/13/paths.txt")
+
+        IO.puts "\nStep 2:"
+        File.read!("lib/13/13-2-input.txt") |> String.replace(".", "") |> String.split("\n") |> process
         File.rm("lib/13/paths.txt")
     end
 end
