@@ -31,7 +31,7 @@ defmodule Aoc2015.Fifteen.One do
     IO.inspect(Enum.max(numbers))
   end
 
-  def createRecipes(instructions, limit, score \\ 0)do
+  def createRecipes(instructions, limit)do
     Enum.each 0..limit, fn a ->
       Enum.each 0..limit, fn b ->
         Enum.each 0..limit, fn c ->
@@ -55,7 +55,11 @@ defmodule Aoc2015.Fifteen.One do
   end
 
   def getScoreFor(instructions, [frosting, peanutButter, sprinkles, sugar], stat) do
-    score = (instructions.frosting[stat] * frosting) + (instructions.peanutbutter[stat] * peanutButter) + (instructions.sprinkles[stat] * sprinkles) + (instructions.sugar[stat] * sugar)
+    score =
+      (instructions.frosting[stat] * frosting) +
+      (instructions.peanutbutter[stat] * peanutButter) +
+      (instructions.sprinkles[stat] * sprinkles) +
+      (instructions.sugar[stat] * sugar)
     if (score < 0), do: 0, else: score
   end
 
@@ -73,7 +77,7 @@ defmodule Aoc2015.Fifteen.One do
     |> String.split("\n")
     |> parseInput
     |> createRecipes(100)
-    getScoresFromFile
+    getScoresFromFile()
     File.rm(@filePath)
   end
 end
