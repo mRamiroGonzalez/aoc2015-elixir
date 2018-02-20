@@ -1,5 +1,5 @@
 
-defmodule Aoc2015.Fifteen.One do
+defmodule Aoc2015.Fifteen.OneTwo do
 
   @filePath "lib/15/recipes.txt"
 
@@ -12,7 +12,7 @@ defmodule Aoc2015.Fifteen.One do
         |> Map.put(:durability, String.to_integer(Enum.at(words, 4)))
         |> Map.put(:flavor, String.to_integer(Enum.at(words, 6)))
         |> Map.put(:texture, String.to_integer(Enum.at(words, 8)))
-        |> Map.put(:calories, String.to_integer(Enum.at(words, 8)))
+        |> Map.put(:calories, String.to_integer(Enum.at(words, 10)))
       Map.put(acc, String.to_atom(String.downcase(Enum.at(words, 0))), ingredient)
     end)
   end
@@ -50,8 +50,10 @@ defmodule Aoc2015.Fifteen.One do
     scoreDurability = getScoreFor(instructions, recipe, :durability)
     scoreFlavor = getScoreFor(instructions, recipe, :flavor)
     scoreTexture = getScoreFor(instructions, recipe, :texture)
+    scoreCalories = getScoreFor(instructions, recipe, :calories)
 
-    scoreCapacity * scoreDurability * scoreFlavor * scoreTexture
+    if (scoreCalories >= 500), do: (scoreCapacity * scoreDurability * scoreFlavor * scoreTexture), else: 0
+
   end
 
   def getScoreFor(instructions, [frosting, peanutButter, sprinkles, sugar], stat) do
@@ -71,10 +73,7 @@ defmodule Aoc2015.Fifteen.One do
 
   def start do
     File.rm(@filePath)
-    File.read!("lib/15/15-input.txt")
-    |> String.replace(":","")
-    |> String.replace(",","")
-    |> String.split("\n")
+    File.read!("lib/15/15-input.txt") |> String.replace(":","") |> String.replace(",","") |> String.split("\n")
     |> parseInput
     |> createRecipes(100)
     getScoresFromFile()
